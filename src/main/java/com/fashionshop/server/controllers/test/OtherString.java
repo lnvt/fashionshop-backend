@@ -1,4 +1,4 @@
-package com.fashionshop.server.controller.test;
+package com.fashionshop.server.controllers.test;
 
 public class OtherString {
     private String message;
