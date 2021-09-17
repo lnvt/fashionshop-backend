@@ -6,39 +6,53 @@ import javax.persistence.*;
 @Table(name = "list_product")
 public class ListProductModel {
 
-    public ListProductModel(){}
-
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
+    @GeneratedValue
+    @Column(name = "list_product_id")
+    public Long ListProductId;
 
-    public Integer getId() {
-        return id;
+    @Column(name = "list_product_name")
+    public String ListProductName;
+
+    @Column(name = "list_product_status")
+    public Boolean ListProductStatus;
+
+    public ListProductModel(Long listProductId, String listProductName, Boolean listProductStatus) {
+        ListProductId = listProductId;
+        ListProductName = listProductName;
+        ListProductStatus = listProductStatus;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Long getListProductId() {
+        return ListProductId;
     }
 
-    public String getName() {
-        return name;
+    public void setListProductId(Long listProductId) {
+        ListProductId = listProductId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getListProductName() {
+        return ListProductName;
     }
 
-    public ListProductModel(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+    public void setListProductName(String listProductName) {
+        ListProductName = listProductName;
+    }
+
+    public Boolean getListProductStatus() {
+        return ListProductStatus;
+    }
+
+    public void setListProductStatus(Boolean listProductStatus) {
+        ListProductStatus = listProductStatus;
     }
 
     @Override
     public String toString() {
         return "ListProductModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "ListProductId=" + ListProductId +
+                ", ListProductName='" + ListProductName + '\'' +
+                ", ListProductStatus=" + ListProductStatus +
                 '}';
     }
 }

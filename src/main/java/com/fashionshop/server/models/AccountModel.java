@@ -8,60 +8,91 @@ import java.util.Date;
 public class AccountModel {
     @Id
     @GeneratedValue
-    private Long id;
-    private String username;
-    private String password;
-    private Boolean status;
-    private Date created_date;
+    @Column(name = "account_id")
+    public Long AccountId;
 
-    public Long getId() {
-        return id;
+    @Column(name = "username")
+    public String Username;
+
+    @Column(name = "password")
+    public String Password;
+
+    @Column(name = "status")
+    public Boolean Status;
+
+    @Column(name = "status")
+    public Date CreatedDate;
+
+    @ManyToOne(cascade= CascadeType.ALL)
+    @JoinColumn(name = "RoleId")
+    public RoleAccountModel fkRoleAccount;
+
+    public AccountModel(Long accountId, String username, String password, Boolean status, Date createdDate, RoleAccountModel fkRoleAccount) {
+        AccountId = accountId;
+        Username = username;
+        Password = password;
+        Status = status;
+        CreatedDate = createdDate;
+        this.fkRoleAccount = fkRoleAccount;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getAccountId() {
+        return AccountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        AccountId = accountId;
     }
 
     public String getUsername() {
-        return username;
+        return Username;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        Username = username;
     }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        Password = password;
     }
 
     public Boolean getStatus() {
-        return status;
+        return Status;
     }
 
     public void setStatus(Boolean status) {
-        this.status = status;
+        Status = status;
     }
 
-    public Date getCreated_date() {
-        return created_date;
+    public Date getCreatedDate() {
+        return CreatedDate;
     }
 
-    public void setCreated_date(Date created_date) {
-        this.created_date = created_date;
+    public void setCreatedDate(Date createdDate) {
+        CreatedDate = createdDate;
+    }
+
+    public RoleAccountModel getFkRoleAccount() {
+        return fkRoleAccount;
+    }
+
+    public void setFkRoleAccount(RoleAccountModel fkRoleAccount) {
+        this.fkRoleAccount = fkRoleAccount;
     }
 
     @Override
     public String toString() {
         return "AccountModel{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", status=" + status +
-                ", created_date=" + created_date +
+                "AccountId=" + AccountId +
+                ", Username='" + Username + '\'' +
+                ", Password='" + Password + '\'' +
+                ", Status=" + Status +
+                ", CreatedDate=" + CreatedDate +
+                ", fkRoleAccount=" + fkRoleAccount +
                 '}';
     }
 }
