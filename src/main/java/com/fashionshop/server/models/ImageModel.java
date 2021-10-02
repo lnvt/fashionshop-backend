@@ -1,59 +1,33 @@
 package com.fashionshop.server.models;
 
 
+import lombok.*;
+
 import javax.persistence.*;
 
+import java.util.List;
+
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "image")
 public class ImageModel {
 
     @Id
-    @GeneratedValue
-    @Column(name = "image_id")
-    public Long ImageId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column( name = "image_id")
+    public Long imageId;
 
-    @Column(name = "image_name")
-    public String ImageName;
+    public String imageName;
 
-    @Column(name = "image_path")
-    public String ImagePath;
+    public String imagePath;
 
-    public ImageModel(Long imageId, String imageName, String imagePath) {
-        ImageId = imageId;
-        ImageName = imageName;
-        ImagePath = imagePath;
-    }
+    @OneToMany(mappedBy = "fkImageSlideShow")
+    private List<SlideShowModel> SlideShow;
 
-    public Long getImageId() {
-        return ImageId;
-    }
-
-    public void setImageId(Long imageId) {
-        ImageId = imageId;
-    }
-
-    public String getImageName() {
-        return ImageName;
-    }
-
-    public void setImageName(String imageName) {
-        ImageName = imageName;
-    }
-
-    public String getImagePath() {
-        return ImagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        ImagePath = imagePath;
-    }
-
-    @Override
-    public String toString() {
-        return "ImageModel{" +
-                "ImageId=" + ImageId +
-                ", ImageName='" + ImageName + '\'' +
-                ", ImagePath='" + ImagePath + '\'' +
-                '}';
-    }
+    @OneToMany(mappedBy = "fkImageProduct")
+    private List<ProductModel> Product;
 }

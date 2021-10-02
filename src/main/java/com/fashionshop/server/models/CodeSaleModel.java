@@ -1,72 +1,36 @@
 package com.fashionshop.server.models;
 
 
-import javax.persistence.*;
+import lombok.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "code_sale")
 public class CodeSaleModel {
 
     @Id
     @GeneratedValue
     @Column(name = "code_sale_id")
-    public Long CodeSaleId;
+    public Long codeSaleId;
 
     @Column(name = "code_sale_name")
-    public String CodeSaleName;
+    public String codeSaleName;
 
     @Column(name = "code_sale_percent_cost")
-    public Long CodeSalePercentCost;
+    public Long codeSalePercentCost;
 
     @Column(name = "code_sale_status")
-    public Boolean CodeSaleStatus;
+    public Boolean codeSaleStatus;
 
-    public CodeSaleModel(Long codeSaleId, String codeSaleName, Long codeSalePercentCost, Boolean codeSaleStatus) {
-        CodeSaleId = codeSaleId;
-        CodeSaleName = codeSaleName;
-        CodeSalePercentCost = codeSalePercentCost;
-        CodeSaleStatus = codeSaleStatus;
-    }
 
-    public Long getCodeSaleId() {
-        return CodeSaleId;
-    }
-
-    public void setCodeSaleId(Long codeSaleId) {
-        CodeSaleId = codeSaleId;
-    }
-
-    public String getCodeSaleName() {
-        return CodeSaleName;
-    }
-
-    public void setCodeSaleName(String codeSaleName) {
-        CodeSaleName = codeSaleName;
-    }
-
-    public Long getCodeSalePercentCost() {
-        return CodeSalePercentCost;
-    }
-
-    public void setCodeSalePercentCost(Long codeSalePercentCost) {
-        CodeSalePercentCost = codeSalePercentCost;
-    }
-
-    public Boolean getCodeSaleStatus() {
-        return CodeSaleStatus;
-    }
-
-    public void setCodeSaleStatus(Boolean codeSaleStatus) {
-        CodeSaleStatus = codeSaleStatus;
-    }
-
-    @Override
-    public String toString() {
-        return "CodeSaleModel{" +
-                "CodeSaleId=" + CodeSaleId +
-                ", CodeSaleName='" + CodeSaleName + '\'' +
-                ", CodeSalePercentCost=" + CodeSalePercentCost +
-                ", CodeSaleStatus=" + CodeSaleStatus +
-                '}';
-    }
 }

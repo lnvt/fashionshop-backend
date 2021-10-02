@@ -1,59 +1,30 @@
 package com.fashionshop.server.models;
 
+import lombok.*;
+
 import javax.persistence.*;
 
+import java.util.List;
+
+
 @Entity
-@Table(name = "role_account")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "role_account", schema = "public")
 public class RoleAccountModel {
 
     @Id
-    @GeneratedValue
-    @Column(name = "role_id")
-    public Long RoleId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column( name = "role_id")
+    private Long roleId;
 
-    @Column(name = "role_name")
-    public String RoleName;
+    private String roleName;
 
-    @Column(name = "role_status")
-    public Boolean RoleStatus;
+    private Boolean roleStatus;
 
-
-    public RoleAccountModel(Long roleId, String roleName, Boolean roleStatus) {
-        RoleId = roleId;
-        RoleName = roleName;
-        RoleStatus = roleStatus;
-    }
-
-    public Long getRoleId() {
-        return RoleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        RoleId = roleId;
-    }
-
-    public String getRoleName() {
-        return RoleName;
-    }
-
-    public void setRoleName(String roleName) {
-        RoleName = roleName;
-    }
-
-    public Boolean getRoleStatus() {
-        return RoleStatus;
-    }
-
-    public void setRoleStatus(Boolean roleStatus) {
-        RoleStatus = roleStatus;
-    }
-
-    @Override
-    public String toString() {
-        return "RoleAccountModel{" +
-                "RoleId=" + RoleId +
-                ", RoleName='" + RoleName + '\'' +
-                ", RoleStatus=" + RoleStatus +
-                '}';
-    }
+    @OneToMany(mappedBy = "fkRoleAccount")
+    private List<AccountModel> Account;
 }

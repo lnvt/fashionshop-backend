@@ -1,72 +1,33 @@
 package com.fashionshop.server.models;
 
+import lombok.*;
+
 import javax.persistence.*;
 
+import java.util.List;
+
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "payment")
 public class PaymentModel {
 
     @Id
     @GeneratedValue
-    @Column(name = "payment_id")
-    public Long PaymentId;
+    @Column( name = "payment_id")
+    public Long paymentId;
 
-    @Column(name = "payment_name")
-    public String PaymentName;
+    public String paymentName;
 
-    @Column(name = "payment_cost")
-    public String PaymentCost;
+    public String paymentCost;
 
-    @ManyToOne(cascade= CascadeType.ALL)
-    @JoinColumn(name = "account_id")
-    public AccountModel fkAccountPayment;
+    @OneToMany(mappedBy = "fkPaymentCart")
+    private List<CartModel> cart;
 
-    public PaymentModel(Long paymentId, String paymentName, String paymentCost, AccountModel fkAccountPayment) {
-        PaymentId = paymentId;
-        PaymentName = paymentName;
-        PaymentCost = paymentCost;
-        this.fkAccountPayment = fkAccountPayment;
-    }
-
-    public Long getPaymentId() {
-        return PaymentId;
-    }
-
-    public void setPaymentId(Long paymentId) {
-        PaymentId = paymentId;
-    }
-
-    public String getPaymentName() {
-        return PaymentName;
-    }
-
-    public void setPaymentName(String paymentName) {
-        PaymentName = paymentName;
-    }
-
-    public String getPaymentCost() {
-        return PaymentCost;
-    }
-
-    public void setPaymentCost(String paymentCost) {
-        PaymentCost = paymentCost;
-    }
-
-    public AccountModel getFkAccountPayment() {
-        return fkAccountPayment;
-    }
-
-    public void setFkAccountPayment(AccountModel fkAccountPayment) {
-        this.fkAccountPayment = fkAccountPayment;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentModel{" +
-                "PaymentId=" + PaymentId +
-                ", PaymentName='" + PaymentName + '\'' +
-                ", PaymentCost='" + PaymentCost + '\'' +
-                ", fkAccountPayment=" + fkAccountPayment +
-                '}';
-    }
+    @ManyToOne
+    @JoinColumn(name = "fk_account_payment")
+    private AccountModel fkAccountPayment;
 }

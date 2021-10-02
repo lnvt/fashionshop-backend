@@ -1,58 +1,26 @@
 package com.fashionshop.server.models;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "footer")
 public class FooterModel {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
-    public Long Id;
+    @Column( name = "id")
+    public Long id;
 
-    @Column(name = "name")
-    public String Name;
+    public String name;
 
-    @Column(name = "description")
-    public String Description;
+    public String description;
 
-    public FooterModel(Long id, String name, String description) {
-        Id = id;
-        Name = name;
-        Description = description;
-    }
 
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "FooterModel{" +
-                "Id=" + Id +
-                ", Name='" + Name + '\'' +
-                ", Description='" + Description + '\'' +
-                '}';
-    }
 }
