@@ -42,4 +42,6 @@ public class AccountModel {
 
     @OneToMany(mappedBy = "fkAccountPost")
     private List<PostModel> post;
+
+    private Boolean isDelete;
 }
