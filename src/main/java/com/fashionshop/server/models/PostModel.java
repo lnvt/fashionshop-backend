@@ -20,13 +20,10 @@ public class PostModel {
     @Column(name = "post_id")
     public Long postId;
 
-    @Column(name = "post_name")
     public String postName;
 
-    @Column(name = "post_description")
     public String postDescription;
 
-    @Column(name = "post_time")
     public Date postTime;
 
     private Long fkAccountPost;

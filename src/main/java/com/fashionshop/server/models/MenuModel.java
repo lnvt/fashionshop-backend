@@ -24,4 +24,5 @@ public class MenuModel {
 
     public Long menuOrder;
 
+    public String menuUrl;
 }
