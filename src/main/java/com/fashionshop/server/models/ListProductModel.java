@@ -24,6 +24,4 @@ public class ListProductModel {
 
     private Boolean listProductStatus;
 
-    @OneToMany(mappedBy = "fkListProduct")
-    private List<ProductModel> product;
 }

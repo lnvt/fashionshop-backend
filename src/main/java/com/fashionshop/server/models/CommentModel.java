@@ -27,12 +27,8 @@ public class CommentModel {
 
     public Date commentTime;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_account_comment")
-    private AccountModel fkAccountComment;
+    private Long fkAccountComment;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_post_comment")
-    private PostModel fkPostComment;
+    private Long fkPostComment;
 
 }

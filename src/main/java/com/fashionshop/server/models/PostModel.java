@@ -29,10 +29,5 @@ public class PostModel {
     @Column(name = "post_time")
     public Date postTime;
 
-    @OneToMany(mappedBy = "fkPostComment")
-    private List<CommentModel> comment;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_account_post")
-    private AccountModel fkAccountPost;
+    private Long fkAccountPost;
 }

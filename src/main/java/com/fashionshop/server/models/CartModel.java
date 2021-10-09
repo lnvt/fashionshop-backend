@@ -29,11 +29,6 @@ public class CartModel {
 
     private Date cartDate;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_payment_cart")
-    private PaymentModel fkPaymentCart;
+    private Long fkPaymentCart;
 
-    @ManyToMany(mappedBy = "carts", cascade = { CascadeType.ALL })
-    @JsonIgnore
-    private Set<ProductModel> product = new HashSet<ProductModel>();
 }

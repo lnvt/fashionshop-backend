@@ -1,55 +1,54 @@
 package com.fashionshop.server.controller;
 
-
-import com.fashionshop.server.dtos.Account.CreateAccountRequest;
-import com.fashionshop.server.dtos.Account.GetAccountByIdResponse;
-import com.fashionshop.server.dtos.Account.GetAllAccountResponse;
 import com.fashionshop.server.models.AccountModel;
-import com.fashionshop.server.repositories.IListProductRepository;
-import com.fashionshop.server.services.Account.AccountService;
+import com.fashionshop.server.services.Interface.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
+import java.util.Optional;
 
-@RequestMapping("/api")
+@RequestMapping("/api/account")
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class AccountController {
 
     @Autowired
-    private IListProductRepository listProductRepository;
+    private IAccountService accountService;
 
-    @Autowired
-    private AccountService accountService;
-
-    @GetMapping("/all-account")
-    public List<GetAllAccountResponse> getAllAccount(){
-        return accountService.getAllAccount();
+    @GetMapping
+    public ResponseEntity<Iterable<AccountModel>> getAllAccount() {
+        return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/account")
-    public GetAccountByIdResponse getAccountByd(@RequestParam Long accountId)
-    {
-        return accountService.getAccountById(accountId);
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountModel> getAccount(@PathVariable Long id) {
+        Optional<AccountModel> accountModelOptional = accountService.findById(id);
+        return accountModelOptional.map(account -> new ResponseEntity<>(account, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public AccountModel createAccount(@RequestBody CreateAccountRequest createAccountRequest)
-    {
-        return accountService.createAccount(createAccountRequest);
+    public ResponseEntity<AccountModel> createAccount(@RequestBody AccountModel account) {
+        return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public String deleteAccount(@RequestParam Long accountId)
-    {
-        return accountService.deleteAccountById(accountId);
+    @PutMapping("/{id}")
+    public ResponseEntity<AccountModel> updateAccount(@PathVariable Long id, @RequestBody AccountModel account) {
+        Optional<AccountModel> accountModelOptional = accountService.findById(id);
+        return accountModelOptional.map(item -> {
+            account.setAccountId(item.getAccountId());
+            return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping
-    public String UpdateAccount()
-    {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<AccountModel> deleteAccount(@PathVariable Long id) {
+        Optional<AccountModel> accountModelOptional = accountService.findById(id);
+        return accountModelOptional.map(item -> {
+            accountService.remove(id);
+            return new ResponseEntity<>(item, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
 }

@@ -30,18 +30,6 @@ public class AccountModel {
 
     private Date createdDate;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_role_account")
-    private RoleAccountModel fkRoleAccount;
+    private Long fkRoleAccount;
 
-    @OneToMany(mappedBy = "fkAccountComment")
-    private List<CommentModel> comment;
-
-    @OneToMany(mappedBy = "fkAccountPayment")
-    private List<PaymentModel> payment;
-
-    @OneToMany(mappedBy = "fkAccountPost")
-    private List<PostModel> post;
-
-    private Boolean isDelete;
 }

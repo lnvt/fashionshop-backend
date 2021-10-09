@@ -34,21 +34,8 @@ public class ProductModel {
 
     private Boolean productStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_list_product")
-    private ListProductModel fkListProduct;
+    private Long fkListProduct;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_image_product")
-    private ImageModel fkImageProduct;
+    private Long fkImageProduct;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "cart_product",
-            joinColumns = { @JoinColumn( name = "product_id", referencedColumnName = "product_id") },
-            inverseJoinColumns = { @JoinColumn( name = "cart_id", referencedColumnName = "cart_id") })
-    private Set< CartModel > carts = new HashSet<>();
-
-    public Set<CartModel> getCartModel(){
-        return carts;
-    }
 }

@@ -25,6 +25,4 @@ public class RoleAccountModel {
 
     private Boolean roleStatus;
 
-    @OneToMany(mappedBy = "fkRoleAccount")
-    private List<AccountModel> Account;
 }

@@ -24,10 +24,5 @@ public class PaymentModel {
 
     public String paymentCost;
 
-    @OneToMany(mappedBy = "fkPaymentCart")
-    private List<CartModel> cart;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_account_payment")
-    private AccountModel fkAccountPayment;
+    private Long fkAccountPayment;
 }

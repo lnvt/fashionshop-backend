@@ -20,17 +20,13 @@ public class CodeSaleModel {
 
     @Id
     @GeneratedValue
-    @Column(name = "code_sale_id")
+    @Column( name = "code_sale_id")
     public Long codeSaleId;
 
-    @Column(name = "code_sale_name")
     public String codeSaleName;
 
-    @Column(name = "code_sale_percent_cost")
     public Long codeSalePercentCost;
 
-    @Column(name = "code_sale_status")
     public Boolean codeSaleStatus;
-
 
 }

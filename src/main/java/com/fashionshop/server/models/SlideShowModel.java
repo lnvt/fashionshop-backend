@@ -24,7 +24,5 @@ public class SlideShowModel {
 
     public String slideShowDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_image_slideshow")
-    private ImageModel fkImageSlideShow;
+    private Long fkImageSlideShow;
 }

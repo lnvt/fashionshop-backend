@@ -1,28 +1,37 @@
 package com.fashionshop.server.services.RoleAccount;
 
-import com.fashionshop.server.converts.RoleAccount.DropDownRoleAccount;
-import com.fashionshop.server.dtos.RoleAccount.DropDownRoleAccountResponse;
 import com.fashionshop.server.models.RoleAccountModel;
 import com.fashionshop.server.repositories.IRoleAccountRepository;
+import com.fashionshop.server.services.Interface.IRoleAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
-public class RoleAccountServices {
-    @Autowired
-    IRoleAccountRepository roleAccountRepository;
+public class RoleAccountServices implements IRoleAccountService {
 
-    public List<DropDownRoleAccountResponse> getDropDownRoleAccount()
-    {
-        List<RoleAccountModel> roleAccountModels = roleAccountRepository.findAll();
-        List<DropDownRoleAccountResponse> dropDownRoleAccountResponses = new ArrayList<>();
-        roleAccountModels.forEach( item -> {
-            DropDownRoleAccountResponse dropDownRoleAccountResponse = DropDownRoleAccount.mappingDropDownRoleAccount(item);
-            dropDownRoleAccountResponses.add(dropDownRoleAccountResponse);
-        });
-        return dropDownRoleAccountResponses;
+    @Autowired
+    private IRoleAccountRepository roleAccountRepository;
+
+
+    @Override
+    public Iterable<RoleAccountModel> findAll() {
+        return roleAccountRepository.findAll();
+    }
+
+    @Override
+    public Optional<RoleAccountModel> findById(long id) {
+        return roleAccountRepository.findById(id);
+    }
+
+    @Override
+    public RoleAccountModel save(RoleAccountModel roleAccountModel) {
+        return roleAccountRepository.save(roleAccountModel);
+    }
+
+    @Override
+    public void remove(Long id) {
+        roleAccountRepository.deleteById(id);
     }
 }

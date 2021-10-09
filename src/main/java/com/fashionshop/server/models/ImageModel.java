@@ -25,9 +25,4 @@ public class ImageModel {
 
     public String imagePath;
 
-    @OneToMany(mappedBy = "fkImageSlideShow")
-    private List<SlideShowModel> SlideShow;
-
-    @OneToMany(mappedBy = "fkImageProduct")
-    private List<ProductModel> Product;
 }

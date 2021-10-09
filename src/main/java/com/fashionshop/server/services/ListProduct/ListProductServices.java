@@ -1,30 +1,36 @@
 package com.fashionshop.server.services.ListProduct;
 
-import com.fashionshop.server.converts.ListProduct.DropDownListMapping;
-import com.fashionshop.server.dtos.ListProduct.DropdownListProductResponse;
 import com.fashionshop.server.models.ListProductModel;
 import com.fashionshop.server.repositories.IListProductRepository;
+import com.fashionshop.server.services.Interface.IListProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ListProductServices {
+public class ListProductServices implements IListProductService {
 
     @Autowired
-    IListProductRepository listProductRepository;
+    private IListProductRepository listProductRepository;
 
-    public List<DropdownListProductResponse> getDropDownListProduct()
-    {
-        List<ListProductModel> listProductModels = listProductRepository.findAll();
-        List<DropdownListProductResponse> dropdownListProductResponses = new ArrayList<>();
-        listProductModels.forEach( item -> {
-            DropdownListProductResponse dropdownListProductResponse = DropDownListMapping.mappingDropDownListProduct(item);
-            dropdownListProductResponses.add(dropdownListProductResponse);
-        });
 
-        return dropdownListProductResponses;
+    @Override
+    public Iterable<ListProductModel> findAll() {
+        return listProductRepository.findAll();
+    }
+
+    @Override
+    public Optional<ListProductModel> findById(long id) {
+        return listProductRepository.findById(id);
+    }
+
+    @Override
+    public ListProductModel save(ListProductModel listProductModel) {
+        return listProductRepository.save(listProductModel);
+    }
+
+    @Override
+    public void remove(Long id) {
+        listProductRepository.deleteById(id);
     }
 }
