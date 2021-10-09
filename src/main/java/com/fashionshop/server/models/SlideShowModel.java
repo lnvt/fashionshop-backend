@@ -18,11 +18,11 @@ public class SlideShowModel {
     @Id
     @GeneratedValue
     @Column( name = "slideshow_id")
-    public Long slideShowId;
+    public Long slideshowId;
 
-    public String slideShowTitle;
+    public String slideshowTitle;
 
-    public String slideShowDescription;
+    public String slideshowDescription;
 
-    private Long fkImageSlideShow;
+    private Long fkImageSlideshow;
 }

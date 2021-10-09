@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
-@RequestMapping("/api/slide-show")
+@RequestMapping("/api/slideshow")
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class SlideShowController {
@@ -37,7 +37,7 @@ public class SlideShowController {
     public ResponseEntity<SlideShowModel> updateSlideShow(@PathVariable Long id, @RequestBody SlideShowModel slideShow) {
         Optional<SlideShowModel> slideShowModelOptional = slideShowService.findById(id);
         return slideShowModelOptional.map(item -> {
-            slideShow.setSlideShowId(item.getSlideShowId());
+            slideShow.setSlideshowId(item.getSlideshowId());
             return new ResponseEntity<>(slideShowService.save(item), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
