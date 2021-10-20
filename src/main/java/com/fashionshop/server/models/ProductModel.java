@@ -36,6 +36,6 @@ public class ProductModel {
 
     private Long fkListProduct;
 
-    private Long fkImageProduct;
+    private String fkImageProduct;
 
 }

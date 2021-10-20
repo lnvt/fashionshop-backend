@@ -22,7 +22,7 @@ public class CartController {
         return new ResponseEntity<>(cartService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail/{id}")
     public ResponseEntity<CartModel> getCart(@PathVariable Long id) {
         Optional<CartModel> cartModelOptional = cartService.findById(id);
         return cartModelOptional.map(item -> new ResponseEntity<>(item, HttpStatus.OK))

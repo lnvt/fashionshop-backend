@@ -25,4 +25,6 @@ public class MenuModel {
     public Long menuOrder;
 
     public String menuUrl;
+
+    public String menuType;
 }

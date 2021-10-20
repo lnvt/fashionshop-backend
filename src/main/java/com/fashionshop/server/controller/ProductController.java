@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
@@ -18,13 +18,20 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping("/product")
     public ResponseEntity<Iterable<ProductModel>> getAllProduct() {
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail/product/{id}")
     public ResponseEntity<ProductModel> getProduct(@PathVariable Long id) {
+        Optional<ProductModel> productModelOptional = productService.findById(id);
+        return productModelOptional.map(product -> new ResponseEntity<>(product, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<ProductModel> getDetailProduct(@PathVariable Long id) {
         Optional<ProductModel> productModelOptional = productService.findById(id);
         return productModelOptional.map(product -> new ResponseEntity<>(product, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -35,7 +42,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.save(product), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/product/{id}")
     public ResponseEntity<ProductModel> updateProduct(@PathVariable Long id, @RequestBody ProductModel product) {
         Optional<ProductModel> productModelOptional = productService.findById(id);
         return productModelOptional.map(item -> {
@@ -44,7 +51,7 @@ public class ProductController {
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/product/{id}")
     public ResponseEntity<ProductModel> deleteProduct(@PathVariable Long id) {
         Optional<ProductModel> productModelOptional = productService.findById(id);
         return productModelOptional.map(item -> {

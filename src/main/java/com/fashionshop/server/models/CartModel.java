@@ -32,4 +32,7 @@ public class CartModel {
     private Long fkPaymentCart;
 
     private Long fkProductCart;
+
+    private Boolean cartStatus;
+
 }
