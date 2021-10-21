@@ -1,13 +1,15 @@
 package com.fashionshop.server.controller;
 
 import com.fashionshop.server.models.CodeSaleModel;
-import com.fashionshop.server.services.Interface.ICodeSaleService;
+import com.fashionshop.server.repositories.ICodeSaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Optional;
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/codesale")
 @RestController
@@ -15,40 +17,36 @@ import java.util.Optional;
 public class CodeSaleController {
 
     @Autowired
-    private ICodeSaleService codeSaleService;
+    private ICodeSaleRepository codeSaleRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<CodeSaleModel>> getAllCodeSale() {
-        return new ResponseEntity<>(codeSaleService.findAll(), HttpStatus.OK);
+    public List<CodeSaleModel> getAllCodeSale() {
+        return codeSaleRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CodeSaleModel> getCodeSale(@PathVariable Long id) {
-        Optional<CodeSaleModel> codeSaleModelOptional = codeSaleService.findById(id);
-        return codeSaleModelOptional.map(codeSale -> new ResponseEntity<>(codeSale, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public CodeSaleModel getAccount(@PathVariable Long id) {
+        return codeSaleRepository.findById(id).get();
     }
 
     @PostMapping
-    public ResponseEntity<CodeSaleModel> createCodeSale(@RequestBody CodeSaleModel codeSale) {
-        return new ResponseEntity<>(codeSaleService.save(codeSale), HttpStatus.OK);
+    public ResponseEntity<Void> createCodeSale(@RequestBody CodeSaleModel codeSale) {
+        CodeSaleModel codeSaleCreate = codeSaleRepository.save(codeSale);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(codeSaleCreate.getCodeSaleId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CodeSaleModel> updateCodeSale(@PathVariable Long id, @RequestBody CodeSaleModel codeSale) {
-        Optional<CodeSaleModel> codeSaleModelOptional = codeSaleService.findById(id);
-        return codeSaleModelOptional.map(item -> {
-            codeSale.setCodeSaleId(item.getCodeSaleId());
-            return new ResponseEntity<>(codeSaleService.save(codeSale), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<CodeSaleModel> updateAccount(@PathVariable Long id, @RequestBody CodeSaleModel codeSale) {
+        CodeSaleModel codeSaleUpdate = codeSaleRepository.save(codeSale);
+        return new ResponseEntity<CodeSaleModel>(codeSale, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CodeSaleModel> deleteCodeSale(@PathVariable Long id) {
-        Optional<CodeSaleModel> codeSaleModelOptional = codeSaleService.findById(id);
-        return codeSaleModelOptional.map(item -> {
-            codeSaleService.remove(id);
-            return new ResponseEntity<>(item, HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+        codeSaleRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

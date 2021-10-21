@@ -2,7 +2,6 @@ package com.fashionshop.server.controller;
 
 import com.fashionshop.server.models.AccountModel;
 import com.fashionshop.server.repositories.IAccountRepository;
-import com.fashionshop.server.services.Interface.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.List;
 
 @RequestMapping("/api/account")
@@ -19,8 +16,6 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class AccountController {
 
-    @Autowired
-    private IAccountService accountService;
 
     @Autowired
     private IAccountRepository accountRepository;
@@ -35,11 +30,10 @@ public class AccountController {
        return accountRepository.findById(id).get();
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<Void> createAccount(@RequestBody AccountModel account) {
-       AccountModel accountCreate = accountRepository.save(account);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{account_id}").buildAndExpand(accountCreate.getAccountId()).toUri();
+        AccountModel accountCreate = accountRepository.save(account);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(accountCreate.getAccountId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 

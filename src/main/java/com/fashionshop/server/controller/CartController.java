@@ -1,13 +1,15 @@
 package com.fashionshop.server.controller;
 
 import com.fashionshop.server.models.CartModel;
-import com.fashionshop.server.services.Interface.ICartService;
+import com.fashionshop.server.repositories.ICartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Optional;
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/cart")
 @RestController
@@ -15,40 +17,36 @@ import java.util.Optional;
 public class CartController {
 
     @Autowired
-    private ICartService cartService;
+    private ICartRepository cartRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<CartModel>> getAllCart() {
-        return new ResponseEntity<>(cartService.findAll(), HttpStatus.OK);
+    public List<CartModel> getAllAccount() {
+        return cartRepository.findAll();
     }
 
-    @GetMapping("/detail/{id}")
-    public ResponseEntity<CartModel> getCart(@PathVariable Long id) {
-        Optional<CartModel> cartModelOptional = cartService.findById(id);
-        return cartModelOptional.map(item -> new ResponseEntity<>(item, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @GetMapping("/{id}")
+    public CartModel getAccount(@PathVariable Long id) {
+        return cartRepository.findById(id).get();
     }
 
     @PostMapping
-    public ResponseEntity<CartModel> createCart(@RequestBody CartModel cart) {
-        return new ResponseEntity<>(cartService.save(cart), HttpStatus.OK);
+    public ResponseEntity<Void> createAccount(@RequestBody CartModel cart) {
+        CartModel cartCreate = cartRepository.save(cart);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(cartCreate.getCartId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CartModel> updateCart(@PathVariable Long id, @RequestBody CartModel cart) {
-        Optional<CartModel> cartModelOptional = cartService.findById(id);
-        return cartModelOptional.map(item -> {
-            cart.setCartId(item.getCartId());
-            return new ResponseEntity<>(cartService.save(cart), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<CartModel> updateAccount(@PathVariable Long id, @RequestBody CartModel cart) {
+        CartModel accountModelUpdate = cartRepository.save(cart);
+        return new ResponseEntity<CartModel>(cart, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CartModel> deleteCart(@PathVariable Long id) {
-        Optional<CartModel> cartModelOptional = cartService.findById(id);
-        return cartModelOptional.map(cart -> {
-            cartService.remove(id);
-            return new ResponseEntity<>(cart, HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+        cartRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

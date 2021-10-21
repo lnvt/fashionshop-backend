@@ -1,13 +1,16 @@
 package com.fashionshop.server.controller;
 
-
 import com.fashionshop.server.models.ListProductModel;
-import com.fashionshop.server.services.ListProduct.ListProductServices;
+import com.fashionshop.server.repositories.IListProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+
 
 @RequestMapping("/api/listproduct")
 @RestController
@@ -15,41 +18,35 @@ import java.util.Optional;
 public class ListProductController {
 
     @Autowired
-    private ListProductServices listProductServices;
+    private IListProductRepository listProductRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<ListProductModel>> getAllListProduct() {
-        return new ResponseEntity<>(listProductServices.findAll(), HttpStatus.OK);
+    public List<ListProductModel> getAllListProduct() {
+        return listProductRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ListProductModel> getListProduct(@PathVariable Long id) {
-        Optional<ListProductModel> listProductModelOptional = listProductServices.findById(id);
-        return listProductModelOptional.map(listProduct -> new ResponseEntity<>(listProduct, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ListProductModel getListProduct(@PathVariable Long id) {
+        return listProductRepository.findById(id).get();
     }
 
     @PostMapping
-    public ResponseEntity<ListProductModel> createListProduct(@RequestBody ListProductModel listProduct) {
-        return new ResponseEntity<>(listProductServices.save(listProduct), HttpStatus.OK);
+    public ResponseEntity<Void> createListProduct(@RequestBody ListProductModel listProduct) {
+        ListProductModel listProductCreate = listProductRepository.save(listProduct);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(listProductCreate.getListProductId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ListProductModel> updateListProduct(@PathVariable Long id, @RequestBody ListProductModel listProduct) {
-        Optional<ListProductModel> listProductModelOptional = listProductServices.findById(id);
-        return listProductModelOptional.map(item -> {
-            listProduct.setListProductId(item.getListProductId());
-            return new ResponseEntity<>(listProductServices.save(item), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        ListProductModel listProductUpdate = listProductRepository.save(listProduct);
+        return new ResponseEntity<ListProductModel>(listProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ListProductModel> deleteListProduct(@PathVariable Long id) {
-        Optional<ListProductModel> listProductModelOptional = listProductServices.findById(id);
-        return listProductModelOptional.map(listProduct -> {
-            listProductServices.remove(id);
-            return new ResponseEntity<>(listProduct, HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Void> deleteListProduct(@PathVariable Long id) {
+        listProductRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -16,8 +16,6 @@ import java.util.List;
 public class ListProductModel {
 
     @Id
-    @GeneratedValue
-    @Column( name = "list_product_id")
     private Long listProductId;
 
     private String listProductName;

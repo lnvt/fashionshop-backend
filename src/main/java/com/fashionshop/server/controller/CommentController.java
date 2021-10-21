@@ -1,12 +1,16 @@
 package com.fashionshop.server.controller;
 
+
 import com.fashionshop.server.models.CommentModel;
-import com.fashionshop.server.services.Interface.ICommentService;
+import com.fashionshop.server.repositories.ICommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/comment")
 @RestController
@@ -14,42 +18,37 @@ import java.util.Optional;
 public class CommentController {
 
     @Autowired
-    private ICommentService commentService;
-
+    private ICommentRepository commentRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<CommentModel>> getAllComment() {
-        return new ResponseEntity<>(commentService.findAll(), HttpStatus.OK);
+    public List<CommentModel> getAllAccount() {
+        return commentRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommentModel> getComment(@PathVariable Long id) {
-        Optional<CommentModel> commentModelOptional = commentService.findById(id);
-        return commentModelOptional.map(comment -> new ResponseEntity<>(comment, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public CommentModel getAccount(@PathVariable Long id) {
+        return commentRepository.findById(id).get();
     }
 
     @PostMapping
-    public ResponseEntity<CommentModel> createComment(@RequestBody CommentModel comment) {
-        return new ResponseEntity<>(commentService.save(comment), HttpStatus.OK);
+    public ResponseEntity<Void> createComment(@RequestBody CommentModel comment) {
+        CommentModel commentCreate = commentRepository.save(comment);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(commentCreate.getCommentId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentModel> updateComment(@PathVariable Long id, @RequestBody CommentModel comment) {
-        Optional<CommentModel> commentModelOptional = commentService.findById(id);
-        return commentModelOptional.map(item -> {
-            comment.setCommentId(item.getCommentId());
-            return new ResponseEntity<>(commentService.save(item), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<CommentModel> updateAccount(@PathVariable Long id, @RequestBody CommentModel comment) {
+        CommentModel accountModelUpdate = commentRepository.save(comment);
+        return new ResponseEntity<CommentModel>(comment, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CommentModel> deleteComment(@PathVariable Long id) {
-        Optional<CommentModel> commentModelOptional = commentService.findById(id);
-        return commentModelOptional.map(comment -> {
-            commentService.remove(id);
-            return new ResponseEntity<>(comment, HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+        commentRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,12 +1,16 @@
 package com.fashionshop.server.controller;
 
+
 import com.fashionshop.server.models.RoleAccountModel;
-import com.fashionshop.server.services.RoleAccount.RoleAccountServices;
+import com.fashionshop.server.repositories.IRoleAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/role-account")
 @RestController
@@ -14,40 +18,36 @@ import java.util.Optional;
 public class RoleAccountController {
 
     @Autowired
-    private RoleAccountServices roleAccountServices;
+    private IRoleAccountRepository roleAccountRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<RoleAccountModel>> getAllRoleAccount() {
-        return new ResponseEntity<>(roleAccountServices.findAll(), HttpStatus.OK);
+    public List<RoleAccountModel> getAllRoleAccount() {
+        return roleAccountRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoleAccountModel> getRoleAccount(@PathVariable Long id) {
-        Optional<RoleAccountModel> roleAccountModelOptional = roleAccountServices.findById(id);
-        return roleAccountModelOptional.map(roleAccount -> new ResponseEntity<>(roleAccount, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public RoleAccountModel getRoleAccount(@PathVariable Long id) {
+        return roleAccountRepository.findById(id).get();
     }
 
     @PostMapping
-    public ResponseEntity<RoleAccountModel> createRoleAccount(@RequestBody RoleAccountModel roleAccount) {
-        return new ResponseEntity<>(roleAccountServices.save(roleAccount), HttpStatus.OK);
+    public ResponseEntity<Void> createRoleAccount(@RequestBody RoleAccountModel account) {
+        RoleAccountModel accountCreate = roleAccountRepository.save(account);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(accountCreate.getRoleId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RoleAccountModel> updateRoleAccount(@PathVariable Long id, @RequestBody RoleAccountModel roleAccount) {
-        Optional<RoleAccountModel> roleAccountModelOptional = roleAccountServices.findById(id);
-        return roleAccountModelOptional.map(item -> {
-            roleAccount.setRoleId(item.getRoleId());
-            return new ResponseEntity<>(roleAccountServices.save(item), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<RoleAccountModel> updateRoleAccount(@PathVariable Long id, @RequestBody RoleAccountModel account) {
+        RoleAccountModel accountModelUpdate = roleAccountRepository.save(account);
+        return new ResponseEntity<RoleAccountModel>(account, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RoleAccountModel> deleteRoleAccount(@PathVariable Long id) {
-        Optional<RoleAccountModel> roleAccountModelOptional = roleAccountServices.findById(id);
-        return roleAccountModelOptional.map(roleAccount -> {
-            roleAccountServices.remove(id);
-            return new ResponseEntity<>(roleAccount, HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Void> deleteRoleAccount(@PathVariable Long id) {
+        roleAccountRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
